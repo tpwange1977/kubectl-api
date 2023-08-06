@@ -1,0 +1,4 @@
+uvicorn
+FastAPI
+python-multipart
+kubernetes

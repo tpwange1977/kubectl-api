@@ -1,0 +1,24 @@
+FROM tiangolo/uvicorn-gunicorn:python3.9
+#python:3.9-alpine
+
+#RUN apk add curl
+
+# 複製本地文件到容器中的指定目錄
+COPY src /src
+COPY requirements.txt /requirements.txt
+COPY deployment.yaml /src/deployment.yaml
+#RUN mkdir /src/temp
+
+# 定義工作目錄（可選）
+WORKDIR /
+
+RUN python -m pip install --upgrade pip
+RUN python -m pip install -r ./requirements.txt
+
+RUN chmod 777 /src/kubectl
+EXPOSE 5000
+
+# 執行命令或指定容器的默認執行命令
+CMD ["uvicorn", "src.mgmt_srv_api:app", "--host", "0.0.0.0", "--workers", "1", "--port", "5000"]
+
+# docker build -t kubectlpod:0.1 -f dockerFile .
